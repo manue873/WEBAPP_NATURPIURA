@@ -1,0 +1,132 @@
+﻿@{
+    ViewData["Title"] = "Privacy Policy";
+}
+<h1>@ViewData["Title"]</h1>
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Navegación Naturitas</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    <style>
+        .navbar-custom {
+            background-color: white;
+            border-bottom: 1px solid #E7E7E7;
+        }
+
+        .navbar-custom .nav-link {
+            color: black;
+            font-weight: 500;
+        }
+
+        .navbar-custom .navbar-brand img {
+            height: 60px;
+            width: auto;
+        }
+
+        .navbar-custom .input-group {
+            width: 100%;
+        }
+
+        .navbar-custom .btn-search {
+            background-color: transparent;
+            border: none;
+        }
+
+        .navbar-custom .fa-search {
+            color: green;
+        }
+
+        .navbar-custom .icon-links i {
+            font-size: 20px;
+            color: black;
+            margin-right: 15px;
+        }
+
+        .navbar-custom .nav-item:hover .nav-link {
+            color: #007bff;
+        }
+
+        .highlighted {
+            background-color: #FFF3F2;
+            color: #FF6B6B;
+            border-radius: 5px;
+            padding: 5px 10px;
+        }
+
+        .green-highlight {
+            background-color: #E0F3EB;
+            color: #00A858;
+            border-radius: 5px;
+            padding: 5px 10px;
+        }
+
+        
+
+    </style>
+</head>
+<body>
+
+<header>
+    <nav class="navbar navbar-expand-lg navbar-light navbar-custom">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <img src="https://via.placeholder.com/150x60" alt="Logo Naturitas">
+            </a>
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item"><a class="nav-link" href="#">Suplementos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Alimentación</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Cosmética e Higiene</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Mamá y Bebé</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Hogar</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Guía de salud</a></li>
+                </ul>
+
+                <!-- Search bar -->
+                <div class="input-group mx-auto my-3 my-lg-0">
+                    <input type="text" class="form-control" placeholder="¿Qué buscas hoy?" aria-label="Buscar">
+                    <div class="input-group-append">
+                        <button class="btn btn-search" type="button"><i class="fa fa-search"></i></button>
+                    </div>
+                </div>
+
+                <!-- Icons -->
+                <div class="icon-links d-flex align-items-center ml-auto">
+                    <a href="#" class="nav-link"><i class="bi bi-person"></i> Iniciar sesión</a>
+                    <a href="#" class="nav-link"><i class="bi bi-box"></i> Mis pedidos</a>
+                    <a href="#" class="nav-link"><i class="bi bi-bell"></i> Mis productos</a>
+                    <a href="#" class="nav-link"><i class="bi bi-cart"></i> Carrito</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Second row with offers -->
+    <nav class="navbar navbar-expand-lg navbar-light navbar-custom">
+        <div class="container-fluid">
+            <ul class="navbar-nav mx-auto">
+                <li class="nav-item"><a class="nav-link highlighted" href="#">Ofertas</a></li>
+                <li class="nav-item"><a class="nav-link green-highlight" href="#">10º aniversario</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Blog</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Nuestras marcas <i class="fa fa-caret-down"></i></a></li>
+            </ul>
+        </div>
+    </nav>
+</header>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
+

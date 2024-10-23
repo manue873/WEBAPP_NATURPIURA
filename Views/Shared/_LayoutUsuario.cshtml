@@ -1,0 +1,367 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+
+   
+
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] INDUSTRIA Botonera Lozano SAC</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.3/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="keywords" content="Groovy Apparel a Responsive Web Template, Bootstrap Web Templates, Flat Web Templates, Android Compatible Web Template, Smartphone Compatible Web Template, Free Webdesigns for Nokia, Samsung, LG, Sony Ericsson, Motorola Web Design">
+    <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+    <!-- //Meta-Tags -->
+    <!-- Custom-StyleSheet-Links -->
+    <!-- Bootstrap-CSS -->
+    <link rel="stylesheet" href="css/bootstrap.css" type="text/css" media="all">
+    
+    <!-- Header-Slider-CSS -->
+    <link rel="stylesheet" href="css/fluid_dg.css" id="fluid_dg-css" type="text/css" media="all">
+    <!-- //Custom-StyleSheet-Links -->
+    <!-- Fonts -->
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Noto+Serif:400,700" type="text/css" media="all">
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Montserrat:400,700" type="text/css" media="all">
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:100,300,400,500" type="text/css" media="all">
+    <!-- //Fonts -->
+    <!-- Font-Awesome-File-Links -->
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/font-awesome.css" type="text/css" media="all">
+    <!-- TTF -->
+    <link rel="stylesheet" href="fonts/fontawesome-webfont.ttf" type="text/css" media="all">
+    <!-- //Font-Awesome-File-Links -->
+    <!-- Supportive-Modernizr-JavaScript -->
+   
+
+    <!-- Default-JavaScript -->
+    <script src="js/jquery-2.2.3.js"></script>
+
+    <link rel="shortcut icon" type="image/x-icon" href="~/Imagenes/logo-modified.ico" />
+
+</head>
+
+<body>
+
+
+    <nav class="navbar navbar-expand-lg" style="background-color: #e3f2fd;">
+        <div class="container">
+
+            <img src="~/Imagenes/logo-modified.png" width="5%" height="5%">
+
+            <a class="btn " asp-area="" asp-controller="Home" asp-action="Reseña">
+                <span><i class="bi bi-building"></i> ¿Quienes somos?</span>
+            </a>
+
+            <a class="btn " asp-area="" asp-controller="Home" asp-action="Index">
+                <span><i class="bi bi-house-fill me-1"></i> Inicio</span>
+            </a>            
+
+            
+            <form asp-action="Index" method="get">
+                <div class="form-actions no-color d-flex text-center justify-content-center align-items-center">
+                    <input class="p-2 form-control col-md-8" type="text" name="searchString" placeholder="¿Qué estas buscando hoy?" style="width: 320px;" value="@ViewData["CurrentFilter"]" />
+                    </br><input class="btn btn-outline-success me-1" type="submit" value="Buscar" />
+                </div>
+            </form>
+
+            <a class="btn" data-toggle="popover" id="carritoButton" asp-controller="Carritoes" asp-action="Index">
+                <i class="bi-cart-fill me-1"></i>
+                Carrito<span></span>
+            </a>
+           
+           
+
+           
+            <script>
+
+                $(document).ready(function () {
+                    // Obtener el valor inicial del servidor
+                    $.ajax({
+                        url: 'https://botoneralozano.azurewebsites.net/home/CantidadDeProductosApi', // reemplaza esto con la URL de tu API
+                        type: 'GET',
+                        dataType: 'json',
+                        success: function (response) {
+                            // Actualizar el valor inicial
+                            $('#valor').text(response.valor);
+                        },
+                        error: function () {
+                            console.log('Error al obtener el valor');
+                        }
+                    });
+
+                    // Actualizar el valor en un intervalo de tiempo determinado
+                    setInterval(function () {
+                        $.ajax({
+                            url: 'https://botoneralozano.azurewebsites.net/home/CantidadDeProductosApi', // reemplaza esto con la URL de tu API
+                            type: 'GET',
+                            dataType: 'json',
+                            success: function (response) {
+                                // Actualizar el valor con la respuesta del servidor
+                                $('#valor').text(response.valor);
+                            },
+                            error: function () {
+                                console.log('Error al obtener el valor');
+                            }
+                        });
+                    }, 5000); // Actualizar el valor cada 5 segundos (cambia esto según tus necesidades)
+                });</script>
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            @if (ViewBag.Session == true)
+            {
+                <a class="btn" asp-area="" asp-controller="Perfil" asp-action="Index">
+                    <span><i class="bi bi-person-circle me-1"></i> Cuenta</span>
+                </a>
+                <a class="btn" onclick="confirmarCerrarSesion()">
+
+                    <span><i class="bi bi-box-arrow-right me-1"></i> Salir</span>
+
+                    <script>
+                        function confirmarCerrarSesion() {
+                            if (confirm('¿Está seguro de que desea cerrar sesión?')) {
+                                // Agrega aquí el código que cierra la sesión del usuario
+                                window.location.href = '/Account/Logout'; // ejemplo de redirección a la página de logout
+                            }
+                            else {
+                                return false
+                            }
+                        }
+                    </script>
+                </a>
+            }
+            @if (ViewBag.Session != true)
+            {
+                <a class="btn " asp-area="" asp-controller="Account" asp-action="Login">
+                    <span><i class="bi bi-person-circle me-1"></i> Iniciar Sesión</span>
+                </a>
+                <a class="btn " asp-area="" asp-controller="Account" asp-action="Registrar">
+                    <span><i class="bi bi-house-fill me-1"></i> Registrarse</span>
+                </a>
+            }
+
+            
+            
+        </div>
+    </nav>
+
+
+
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+
+    
+    <!-- copyright -->
+    <div class="cpy-right text-center py-3" style="background-color: #e3f2fd">
+        <p>
+            &copy; @DateTime.Now.Year - Todos los Derechos Reservados | Diseñado por MG
+        </p>
+    </div>
+    <!-- //copyright -->
+    
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa"
+        crossorigin="anonymous"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @RenderSection("Scripts", required: false)    
+
+
+
+
+    <!-- Custom-JavaScript-File-Links -->
+    
+    <!-- Shopping-Cart-JavaScript -->
+    <!-- Header-Slider-JavaScript-Files -->
+    <script type='text/javascript' src='js/jquery.easing.1.3.js'></script>
+    <script type='text/javascript' src='js/fluid_dg.min.js'></script>
+    <script>
+        jQuery(document).ready(function () {
+            jQuery(function () {
+                jQuery('#fluid_dg_wrap_4').fluid_dg({
+                    height: 'auto',
+                    loader: 'bar',
+                    pagination: false,
+                    thumbnails: true,
+                    hover: false,
+                    opacityOnGrid: false,
+                    imagePath: '',
+                    time: 4000,
+                    transPeriod: 2000,
+                });
+            });
+        })
+    </script>
+    <!-- //Header-Slider-JavaScript-Files -->
+    <!-- Dropdown-Menu-JavaScript -->
+    <script>
+        $(document).ready(function () {
+            $(".dropdown").hover(
+                function () {
+                    $('.dropdown-menu', this).stop(true, true).slideDown("fast");
+                    $(this).toggleClass('open');
+                },
+                function () {
+                    $('.dropdown-menu', this).stop(true, true).slideUp("fast");
+                    $(this).toggleClass('open');
+                }
+            );
+        });
+    </script>
+    <!-- //Dropdown-Menu-JavaScript -->
+    <!-- Pricing-Popup-Box-JavaScript -->
+    <script src="js/jquery.magnific-popup.js" type="text/javascript"></script>
+    <script>
+        $(document).ready(function () {
+            $('.popup-with-zoom-anim').magnificPopup({
+                type: 'inline',
+                fixedContentPos: false,
+                fixedBgPos: true,
+                overflowY: 'auto',
+                closeBtnInside: true,
+                preloader: false,
+                midClick: true,
+                removalDelay: 300,
+                mainClass: 'my-mfp-zoom-in'
+            });
+        });
+    </script>
+    <!-- //Pricing-Popup-Box-JavaScript -->
+    <!-- Model-Slider-JavaScript-Files -->
+    <script src="js/jquery.film_roll.js"></script>
+    <script>
+        (function () {
+            jQuery(function () {
+                this.film_rolls || (this.film_rolls = []);
+                this.film_rolls['film_roll_1'] = new FilmRoll({
+                    container: '#film_roll_1',
+                    height: 560
+                });
+                return true;
+            });
+        }).call(this);
+    </script>
+    <!-- //Model-Slider-JavaScript-Files -->
+    <!-- //Custom-JavaScript-File-Links -->
+    <!-- Bootstrap-JavaScript -->
+    <script src="js/bootstrap.js"></script>
+
+
+
+
+    <style>
+        /* Ajusta el ancho del popover para diferentes tamaños de pantalla */
+        .popover {
+            max-width: 100%; /* Asegura que el popover no se salga del contenedor */
+            width: auto; /* Permite que el popover se ajuste al contenido */
+        }
+
+        /* Asegura que el contenido del popover no se desborde */
+        .popover-body {
+            overflow-x: auto; /* Permite el desplazamiento horizontal si es necesario */
+            font-size: 0.9rem; /* Tamaño de fuente ajustado */
+        }
+
+        /* Ajustes específicos para pantallas pequeñas */
+       
+
+       
+            }
+        }
+    </style>
+
+    <script>
+        $(document).ready(function () {
+            // Inicializar popover
+            $('#carritoButton').popover({
+                html: true,
+                content: function () {
+                    var loading = '<div class="text-center"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div></div>';
+                    // Obtener productos del carrito desde el servidor
+                    $.ajax({
+                        url: 'https://botoneralozano.azurewebsites.net/Home/ProductoEnCarrito',
+                        type: 'GET',
+                        dataType: 'json',
+                        success: function (data) {
+                            // Crear una tabla HTML para mostrar los productos
+                            var table = `
+                                    <div class="popover-body">
+                                        <table class="table table-hover mb-0">
+                                            <thead>
+                                                <tr>
+                                                    <th>Imagen</th>
+                                                    <th>Nombre</th>
+                                                    <th>Precio</th>
+                                                    <th>Cantidad</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                `;
+                            $.each(data, function (i, item) {
+                                table += `
+                                        <tr>
+                                            <td class="align-middle">
+                                                <img src="${item.urlImaggen}" alt="${item.nombreProducto}" class="img-fluid" style="max-width: 50px; max-height: 50px;">
+                                            </td>
+                                            <td class="align-middle">${item.nombreProducto}</td>
+                                            <td class="align-middle">${item.precioUnidad}</td>
+                                            <td class="align-middle">${item.cantidad}</td>
+                                        </tr>
+                                    `;
+                            });
+                            table += `
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                `;
+                            // Actualizar contenido del popover con la tabla HTML
+                            $('#carritoButton').attr('data-content', table);
+                        },
+                        error: function () {
+                            // Mostrar mensaje de error en caso de fallo
+                            $('#carritoButton').attr('data-content', '<div class="text-center">Error al cargar productos</div>');
+                        }
+                    });
+
+                    return loading;
+                },
+                placement: 'bottom',
+                trigger: 'hover'
+            });
+        });
+    </script>
+
+
+
+</body>
+
+</html>
+

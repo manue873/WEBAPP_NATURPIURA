@@ -1,0 +1,236 @@
+﻿
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+
+    /*Nav bar*/
+/*    .search-bar {
+        width: 100%;
+        max-width: 400px;
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid #ddd;
+    }
+
+    .category-bar {
+        background-color: #8d0036;
+        padding: 10px 0;
+    }
+
+    .category-links {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        justify-content: space-around;
+        flex-wrap: wrap;
+    }
+
+        .category-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+    .dropdown:hover .dropdown-content {
+        display: block;
+    }*/
+         /* .btn-search {
+            background-color: #8d0036;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+        }
+
+            .btn-search:hover {
+                background-color: #73002b;
+            }
+
+        .btn-category {
+            background-color: transparent;
+            border: none;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+            .btn-category:hover {
+                color: #ffcccc;
+            }
+    */
+    /*Footer*/
+    .footer {
+        background-color: #333;
+        color: white;
+        padding: 20px 0;
+    }
+
+    .footer-links {
+        display: flex;
+        justify-content: space-around;
+        flex-wrap: wrap;
+    }
+
+        .footer-links div {
+            margin: 10px 0;
+        }
+
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+            display: block;
+        }
+
+    .pie-pagina {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    .newsletter input {
+        width: 100%;
+        max-width: 300px;
+        margin-bottom: 10px;
+    }
+
+  
+    .save-email-btn {
+        background-color: #9c9c9c;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+        .save-email-btn:hover {
+            background-color: #666666;
+        }
+
+    html, body {
+        height: 100%;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+    }
+
+    main {
+        flex: 1;
+    }
+
+    .footer {
+        background-color: #333;
+        color: white;
+        padding: 20px 0;
+        margin-top: auto; 
+    }
+</style>
+
+@*<nav class="navbar navbar-light bg-light justify-content-between">
+    <h1 class="navbar-brand mx-3"><i>PKSneaker</i></h1>
+    
+    <form asp-controller="Home" asp-action="Index" class="d-flex mx-3" method="get">
+        <input class="form-control me-2 search-bar" type="search" placeholder="Buscar..." name="cadenaBusqueda" aria-label="Search" value="@ViewData["cadenaBusqueda"]">
+        <button class="btn btn-search" type="submit">Buscar</button>
+    </form>
+</nav>*@
+@*
+<div class="category-bar">
+    <ul class="category-links container">
+        <li class="dropdown">
+            <button class="btn-category">Marcas</button>
+        </li>
+        <li class="dropdown">
+            <button class="btn-category">Ofertas</button>
+        </li>
+        <li class="dropdown">
+            <button class="btn-category">Nuevo</button>
+        </li>
+        <li class="dropdown">
+            <button class="btn-category">Hombres</button>
+        </li>
+        <li class="dropdown">
+            <button class="btn-category">Mujeres</button>
+        </li>
+        <li class="dropdown">
+            <button class="btn-category">Niños</button>
+        </li>
+    </ul>
+</div>*@
+<nav class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" asp-controller="Home" asp-action="Index">
+            <img src="/Images/natupiura.jpg" alt="Bootstrap" width="50" height="35" style="border-radius:4px">
+        </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Link</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Dropdown
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">Action</a></li>
+                        <li><a class="dropdown-item" href="#">Another action</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#">Something else here</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+                </li>
+            </ul>
+            <form class="d-flex" role="search" asp-controller="Home" asp-action="Index" method="get">
+                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="cadenaBusqueda" value="@ViewData["cadenaBusqueda"]">
+                <button class="btn btn-outline-success" type="submit">Buscar</button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+<main role="main" class="container py-4">
+    @RenderBody()
+</main>
+
+<footer class="footer">
+    <div class="footer-links container">
+        <div class="contact">
+            <h4>CONTÁCTENOS</h4>
+            <p>WhatsApp: 123456789</p>
+            <p>Instagram: PKSneaker</p>
+            <p>Email: info@pksneaker.com</p>
+        </div>
+        <div class="user-center">
+            <h4>CENTRO DE USUARIOS</h4>
+            <a href="#">Sobre nosotros</a>
+            <a href="#">Condiciones de uso</a>
+            <a href="#">Contáctenos</a>
+        </div>
+        <div class="help">
+            <h4>AYUDA</h4>
+            <a href="#">Cómo hacer un pedido</a>
+            <a href="#">Pago</a>
+            <a href="#">Política de devoluciones</a>
+            <a href="#">Rastrea tu pedido</a>
+        </div>
+        <div class="newsletter">
+            <h4>SUSCRÍBETE AL BOLETÍN</h4>
+            <input type="email" placeholder="Tu correo electrónico" class="form-control">
+            <button type="submit" class="save-email-btn">Suscribirse</button>
+        </div>
+    </div>
+    <div class="pie-pagina">
+        <p>&copy; 2024 PKSneaker.com | Condiciones de uso | Política de privacidad</p>
+    </div>
+</footer>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

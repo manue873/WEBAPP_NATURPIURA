@@ -1,0 +1,38 @@
+﻿@if (ViewBag.ErrorMessage != null)
+{
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script type="text/javascript">
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: '@ViewBag.ErrorMessage'
+        });
+    </script>
+}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="text-center">Verificación de teléfono</h2>
+                    <h5 class="text-center">Se le ha enviado un código de verificación al número @ViewBag.Telefono</h5>
+                </div>
+                <div class="card-body">
+                    <form asp-action="VerificarOTP">
+                        <div asp-validation-summary="All" class="text-danger"></div>
+                        <div class="form-group">
+                            <label for="otpCode">Ingrese el código: </label>
+                            <input type="text" name="otpCode" id="otpCode" class="form-control" required>
+                        </div>
+                        <br />
+                        <div class="mb-3">
+                            <button type="submit" class="btn btn-primary mr-2">Enviar</button>
+                            <a asp-action="Registrar"  class="btn btn-secondary">Cancelar</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

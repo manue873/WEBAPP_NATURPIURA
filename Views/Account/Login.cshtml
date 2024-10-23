@@ -1,0 +1,64 @@
+﻿@model WEBAPP_NATURPIURA.ViewModels.UsuarioLogin;
+
+@{
+    ViewData["Title"] = "Iniciar Sesión :: ";
+    Layout = "";
+}
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión </title>
+    <link href="~/css/login.css" rel="stylesheet" />
+   
+</head>
+
+<body>
+    <div class="contenedor">
+        <!-- Sección de Iniciar Sesión -->
+        <div class="form-container iniciar-sesion-container">
+            <form asp-action="Login" method="post">
+                <h1>Iniciar Sesión</h1>
+                <span>Use su correo y contraseña</span>
+                <input asp-for="Correo" type="email" placeholder="Email" />
+                <input asp-for="Clave" type="password" placeholder="Password" />
+                <a href="#">¿Olvidaste tu contraseña?</a>
+                <button type="submit">INICIAR SESIÓN</button>
+            </form>
+            @ViewData["Mensaje"]
+        </div>
+
+        <!-- Panel de Información -->
+        <div class="overlay-container">
+            <div class="overlay">
+                <div class="overlay-panel overlay-left">
+                    <h1>¿No tienes cuenta?</h1>
+                    <p>Regístrate para poder acceder a todas las funciones del sitio</p>
+                    <a asp-action="Registrar" class="ghost">Registrarse</a> <!-- Redirección a la página de registro -->
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
+<script>
+    
+     function togglePasswordVisibility() {
+         var passwordInput = document.getElementById("password");
+         var toggleIcon = document.querySelector("#toggleIcon i");
+
+         if (passwordInput.type === "password") {
+             passwordInput.type = "text";
+             toggleIcon.classList.remove("fa-eye");
+             toggleIcon.classList.add("fa-eye-slash");
+         } else {
+             passwordInput.type = "password";
+             toggleIcon.classList.remove("fa-eye-slash");
+             toggleIcon.classList.add("fa-eye");
+         }
+     }
+</script>
+

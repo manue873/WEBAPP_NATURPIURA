@@ -1,0 +1,74 @@
+﻿@model WEBAPP_NATURPIURA.ViewModels.UsuarioRegistro
+@{
+    ViewData["Title"] = "Registrase:: ";
+    Layout = "";
+}
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrarse</title>
+    <link href="~/css/login.css" rel="stylesheet" />
+    
+</head>
+
+<body>
+    <div class="contenedor">
+        <!-- Sección de Registrarse -->
+        <div class="form-container registrarse-container">
+            <div class="form-container">
+                <h1>Registrarse</h1>
+                <span>Use su correo electrónico para registrarse</span>
+
+                <div class="form-scrollable">
+                    <form asp-action="Registrar" method="post">
+                        <p>Credenciales de Registro</p>
+                        <input asp-for="Usuario.Correo" type="email" id="email" name="Usuario.Correo" placeholder="Ingrese su correo" maxlength="100" required>
+                        <input asp-for="Usuario.Clave" type="password" id="password" name="Usuario.Clave" placeholder="Ingrese su contraseña" required>
+                        <p>Datos del Cliente</p>
+                        <input asp-for="Usuario.Nombres" type="text" id="nombres" name="Usuario.Nombres" placeholder="Ingrese sus nombres" maxlength="60" required>
+                        <span asp-validation-for="Usuario.Nombres" class="text-danger"></span>
+                        <input asp-for="Usuario.Apellidos" type="text" id="apellido" name="Usuario.Apellidos" placeholder="Ingrese su apellido" maxlength="60" required>
+                        <span asp-validation-for="Usuario.Apellidos" class="text-danger"></span>
+                        <select asp-for="Usuario.TipoDocumento" id="tipoDocumento" name="Usuario.TipoDocumento" required>
+                            <option value="dni">DNI</option>
+                            <option value="nie">NIE</option>
+                            <option value="pasaporte">Pasaporte</option>
+                        </select>
+                        <input asp-for="Usuario.NumeroDocumento" type="text" id="numeroDocumento" name="Usuario.NumeroDocumento" placeholder="Ingrese su número de documento" maxlength="30" required>
+                        <input asp-for="Usuario.Telefono" type="text" id="telefono" name="Usuario.Telefono" placeholder="Ingrese su número de teléfono" maxlength="9" required>
+                        <select asp-for="Direccion.Provincia" id="provincia" name="Direccion.Provincia" required>
+                            <option value="piura">Piura</option>
+                            <option value="sullana">Sullana</option>
+                            <option value="talara">Talara</option>
+                            <option value="paita">Paita</option>
+                            <option value="sechura">Sechura</option>
+                            <option value="morropon">Morropon</option>
+                            <option value="huancabamba">Huancabamba</option>
+                        </select>
+                        <input asp-for="Direccion.Distrito" type="text" id="distrito" name="Direccion.Distrito" placeholder="Ingrese su distrito" maxlength="50" required>
+                        <input asp-for="Direccion.Calle" type="text" id="calle" name="Direccion.Calle" placeholder="Ingrese su calle o dirección" maxlength="50" required>
+                        <button type="submit">Registrarse</button>
+                    </form>
+
+                </div>
+               @ViewData["Mensaje"]
+            </div>
+        </div>
+
+        <!-- Panel de Información -->
+        <div class="overlay-container">
+            <div class="overlay">
+                <div class="overlay-panel overlay-left">
+                    <h1>¿Ya tienes cuenta?</h1>
+                    <p>Inicia sesión con tu correo y contraseña</p>
+                    <a asp-action="Login" class="ghost">Iniciar Sesión</a> <!-- Redirección a la página de login -->
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

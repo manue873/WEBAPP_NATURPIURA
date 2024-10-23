@@ -1,0 +1,127 @@
+﻿@model WEBAPP_NATURPIURA.ViewModels.ProductoRegistro
+@{
+    ViewData["Title"] = "Registrar Producto";
+    var listaBeneficios = ViewBag.listaBeneficios as IEnumerable<dynamic>;
+    var listaCategorias = ViewBag.listaCategorias as IEnumerable<dynamic>;
+    
+}
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<div class="container mt-5">
+    <h2>Registrar Producto</h2>
+    <form method="post" class="row g-3" asp-action="AgregarProducto">
+        <div class="col-md-6">
+            <label for="ImagenUrl" class="form-label">URL de la Imagen</label>
+            <input type="text" class="form-control" asp-for="ImagenUrl" id="ImagenUrl" name="ImagenUrl" required>
+        </div>
+        <div class="col-md-6">
+            <label for="Nombre" class="form-label">Nombre</label>
+            <input type="text" class="form-control" asp-for="Nombre" id="Nombre" name="Nombre" required>
+        </div>
+        <div class="col-md-12">
+            <label for="Descripcion" class="form-label">Descripción</label>
+            <textarea class="form-control" id="Descripcion" asp-for="Descripcion" name="Descripcion" maxlength="300" required></textarea>
+        </div>
+        <div class="col-md-6">
+            <label for="IdCategoria" class="form-label">Categoría</label>
+            <select class="form-select" asp-for="IdCategoria" id="IdCategoria" name="IdCategoria">
+                @if (listaCategorias != null)
+                {
+                    foreach (var categoria in listaCategorias)
+                    {
+                        <option value="@categoria.IdCategoria">@categoria.Descripcion</option>
+                    }
+                }
+            </select>
+            <button type="button" class="btn btn-link p-0" data-bs-toggle="modal" data-bs-target="#nuevaCategoriaModal">Crear nueva categoría</button>
+        </div>
+        <div class="col-md-6">
+            <label for="Beneficio" class="form-label">Beneficio</label>
+            <select class="form-select" asp-for="ProductoBeneficio.IdBeneficio" id="ProductoBeneficio_IdBeneficio" name="ProductoBeneficio.IdBeneficio">
+                @if (listaBeneficios != null)
+                {
+                    foreach (var beneficio in listaBeneficios)
+                    {
+                        <option value="@beneficio.IdBeneficio">@beneficio.NombreBeneficio</option>
+                    }
+                }
+            </select>
+            <button type="button" class="btn btn-link p-0" data-bs-toggle="modal" data-bs-target="#nuevoBeneficioModal">Crear nuevo beneficio</button>
+        </div>
+        <div class="col-md-6">
+            <label for="PrecioUnidadCompra" class="form-label">Precio Unidad Compra</label>
+            <input type="number" step="0.01" asp-for="PrecioUnidadCompra" class="form-control" id="PrecioUnidadCompra" name="PrecioUnidadCompra" required>
+        </div>
+        <div class="col-md-6">
+            <label for="PrecioUnidadVenta" class="form-label">Precio Unidad Venta</label>
+            <input type="number" step="0.01" asp-for="PrecioUnidadVenta" class="form-control" id="PrecioUnidadVenta" name="PrecioUnidadVenta" required>
+        </div>
+        <div class="col-md-6">
+            <label for="Stock" class="form-label">Stock</label>
+            <input type="number" asp-for="Stock" class="form-control" id="Stock" name="Stock" required>
+        </div>
+        <div class="col-md-6">
+            <label for="Activo" class="form-label">Activo</label>
+            <div class="form-check">
+                <input type="checkbox" class="form-check-input" asp-for="Activo" id="Activo" name="Activo" checked="checked">
+                <label class="form-check-label" for="Activo">Activo</label>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <label for="FechaRegistro" class="form-label">Fecha de Registro</label>
+            <input type="datetime-local" asp-for="FechaRegistro" class="form-control" id="FechaRegistro" name="FechaRegistro">
+        </div>
+        <div class="col-12">
+            <button type="submit" class="btn btn-primary">Registrar</button>
+        </div>
+    </form>
+</div>
+
+
+
+<!-- Modal para nueva categoría -->
+<div class="modal fade" id="nuevaCategoriaModal" tabindex="-1" aria-labelledby="nuevaCategoriaModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="nuevaCategoriaModalLabel">Crear Nueva Categoría</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="mb-3">
+                        <label for="nuevaCategoria" class="form-label">Nombre de la Categoría</label>
+                        <input type="text" class="form-control" id="nuevaCategoria" name="nuevaCategoria">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para nuevo beneficio -->
+<div class="modal fade" id="nuevoBeneficioModal" tabindex="-1" aria-labelledby="nuevoBeneficioModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="nuevoBeneficioModalLabel">Crear Nuevo Beneficio</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="mb-3">
+                        <label for="nuevoBeneficio" class="form-label">Nombre del Beneficio</label>
+                        <input type="text" class="form-control" id="nuevoBeneficio" name="nuevoBeneficio">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+
