@@ -185,6 +185,7 @@ namespace WEBAPP_NATURPIURA.Controllers
 
         public IActionResult Registrar()
         {
+            
             return View();
         }
         
