@@ -75,6 +75,7 @@ namespace WEBAPP_NATURPIURA.Controllers
         
         public IActionResult Restriccion()
         {
+            
             return View();
         }
         [Authorize]
