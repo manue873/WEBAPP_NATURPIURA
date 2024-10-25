@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using NATURPIURA.ViewModels;
 using WEBAPP_NATURPIURA.Models1;
 using WEBAPP_NATURPIURA.ViewModels;
 
@@ -13,14 +14,14 @@ namespace WEBAPP_NATURPIURA.Controllers
         {
             bd = context;
         }
-       
+
         public async Task<IActionResult> Index(string searchString)
         {
             ViewData["CurrentFilter"] = searchString;
             ViewBag.Producto = 1;
             try
             {
-                
+
                 var BusquedaProductos = from s in bd.Productos.Include(u => u.IdCategoriaNavigation) select s;
                 if (!String.IsNullOrEmpty(searchString))
                 {
@@ -33,13 +34,13 @@ namespace WEBAPP_NATURPIURA.Controllers
                 }
                 return View(await BusquedaProductos.ToListAsync());
             }
-            catch(Exception)
+            catch (Exception)
             {
                 return View();
             }
         }
 
-        
+
         public ActionResult Details(int id)
         {
             return View();
@@ -76,39 +77,42 @@ namespace WEBAPP_NATURPIURA.Controllers
 
             try
             {
-                
-                    var productoBeneficioRegistro = modeloIngreso.ProductoBeneficio;
-                    
-                    var productoRegistro = modeloIngreso;
+                var productoRegistro = modeloIngreso;
 
-                    Producto producto = new Producto
+                Producto producto = new Producto
+                {
+                    Nombre = modeloIngreso.Nombre,
+                    Descripcion = modeloIngreso.Descripcion,
+                    Stock = modeloIngreso.Stock,
+                    Activo = modeloIngreso.Activo,
+                    FechaRegistro = modeloIngreso.FechaRegistro,
+                    PrecioUnidadCompra = modeloIngreso.PrecioUnidadCompra,
+                    PrecioUnidadVenta = modeloIngreso.PrecioUnidadVenta,
+                    ImagenUrl = modeloIngreso.ImagenUrl,
+                    IdCategoria = modeloIngreso.IdCategoria
+                };
+                bd.Productos.Add(producto);
+                bd.SaveChanges();
+
+                for (int i = 0; i < modeloIngreso.ListaBeneficios.Count; i++)
+                {
+                    var beneficioView = modeloIngreso.ListaBeneficios[i];
+                    var productoBeneficio= new ProductoBeneficio
                     {
-                        Nombre =modeloIngreso.Nombre,
-                        Descripcion = modeloIngreso.Descripcion,
-                        Stock = modeloIngreso.Stock,
-                        Activo = modeloIngreso.Activo,
-                        FechaRegistro= modeloIngreso.FechaRegistro,
-                        PrecioUnidadCompra=modeloIngreso.PrecioUnidadCompra,
-                        PrecioUnidadVenta = modeloIngreso.PrecioUnidadVenta,
-                        ImagenUrl= modeloIngreso.ImagenUrl,
-                        IdCategoria= modeloIngreso.IdCategoria
+                        IdProducto = producto.IdProducto,
+                        IdBeneficio = beneficioView
                     };
-                    bd.Productos.Add(producto);
-                    bd.SaveChanges();
-
-                    
-                    productoBeneficioRegistro.IdProducto = producto.IdProducto;
-                    productoBeneficioRegistro.IdBeneficio = modeloIngreso.ProductoBeneficio.IdBeneficio;
-
-                    bd.ProductoBeneficios.Add(productoBeneficioRegistro);
-                    bd.SaveChanges();
-                    return RedirectToAction("Index", "Productos");
+                    bd.ProductoBeneficios.Add(productoBeneficio);
+                }
+                bd.SaveChanges();
+                return RedirectToAction("Index", "Productos");
             }
-            catch(Exception e)
+
+            catch (Exception e)
             {
-                Console.WriteLine(e);
+                ModelState.AddModelError("", "Ocurrió un error al intentar registrar el producto. Inténtalo de nuevo.");
             }
-            
+
             return View(modeloIngreso);
         }
 
