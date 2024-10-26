@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NATURPIURA.ViewModels;
@@ -7,6 +8,7 @@ using WEBAPP_NATURPIURA.ViewModels;
 
 namespace WEBAPP_NATURPIURA.Controllers
 {
+    [Authorize]
     public class ProductosController : Controller
     {
         private readonly NatupiuraContext bd;
@@ -74,11 +76,11 @@ namespace WEBAPP_NATURPIURA.Controllers
             ViewBag.listaBeneficios = await (from s in bd.Beneficios
                                              orderby s.NombreBeneficio ascending
                                              select new { s.NombreBeneficio, s.IdBeneficio }).ToListAsync();
-
             try
             {
                 var productoRegistro = modeloIngreso;
-
+                var usuario = new Usuario();
+                Usuario CurrentUser = await usuario.GetUsuarioByCorreoAsync(User.Identity.Name);
                 Producto producto = new Producto
                 {
                     Nombre = modeloIngreso.Nombre,
@@ -96,21 +98,41 @@ namespace WEBAPP_NATURPIURA.Controllers
 
                 for (int i = 0; i < modeloIngreso.ListaBeneficios.Count; i++)
                 {
-                    var beneficioView = modeloIngreso.ListaBeneficios[i];
+                    var beneficioid= modeloIngreso.ListaBeneficios[i];
                     var productoBeneficio= new ProductoBeneficio
                     {
                         IdProducto = producto.IdProducto,
-                        IdBeneficio = beneficioView
+                        IdBeneficio = beneficioid
                     };
                     bd.ProductoBeneficios.Add(productoBeneficio);
                 }
                 bd.SaveChanges();
+                var kardex = new Kardex()
+                {
+                    IdProducto = modeloIngreso.IdProducto,
+                    FechaMovimiento = modeloIngreso.FechaRegistro,
+                    TipoMovimiento = "Ingreso",
+                    Cantidad = modeloIngreso.Stock,
+                    CostoUnitario = modeloIngreso.PrecioUnidadCompra,
+                    TotalCostoMovimiento = modeloIngreso.Stock * modeloIngreso.PrecioUnidadCompra,
+                    SaldoCantidad = modeloIngreso.Stock,
+                    DocumentoReferencia = "000000000000",
+                    Observaciones = "No hay observaciones",
+                    SaldoCosto= modeloIngreso.Stock * modeloIngreso.PrecioUnidadCompra,
+                    IdUsuario = CurrentUser.IdUsuario,
+                    IdProductoNavigation=producto
+                };
+
+                 await bd.Kardices.AddAsync(kardex);
+                await bd.SaveChangesAsync();
+                
                 return RedirectToAction("Index", "Productos");
             }
 
             catch (Exception e)
             {
                 ModelState.AddModelError("", "Ocurrió un error al intentar registrar el producto. Inténtalo de nuevo.");
+                Console.WriteLine(e.Message);
             }
 
             return View(modeloIngreso);

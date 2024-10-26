@@ -7,7 +7,7 @@ namespace WEBAPP_NATURPIURA.Models1
     {
         public int IdKardex { get; set; }
         public int IdProducto { get; set; }
-        public DateTime FechaMovimiento { get; set; }
+        public DateTime? FechaMovimiento { get; set; }
         public string TipoMovimiento { get; set; } = null!;
         public decimal? Cantidad { get; set; }
         public decimal CostoUnitario { get; set; }
