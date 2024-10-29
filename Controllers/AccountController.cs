@@ -130,46 +130,59 @@ namespace WEBAPP_NATURPIURA.Controllers
             ViewData["mensaje"] = "";
             return View();
         }
+        /// <summary>
+        /// Verificación de credenciales del usuario y registro de los archivos en el navegador (cookies).
+        /// </summary>
+        /// <param name="usuario">Objeto del modelo UsuarioLogin usado para el Login.</param>
+        /// <param name="returnUrl">URL actual desde la que se desea el login, se usa para seguir el flujo a donde iba el usuario.</param>
+        /// <returns>Si las credenciales son correctas, redirige al home y almacena las cookies en el navegador; caso contrario, se sigue en el bucle.</returns>
         [HttpPost]
         public IActionResult Login(UsuarioLogin usuario, string returnUrl = null)
         {
-            //probando
             try
             {
                 Usuario _usuario = new Usuario();
-                
+
+                // Encriptar la clave ingresada por el usuario
                 var claveEncriptadaVista = Encriptacion.Encrypt(usuario.Clave);
+
+                // Validar las credenciales del usuario
                 if (_usuario.ValidarCredencialesDeIngresoAsync(usuario.Correo, claveEncriptadaVista).Result == true)
                 {
+                    // Crear la identidad y el principal del usuario
                     var identity = new ClaimsIdentity(new[] {
-                         new Claim(ClaimTypes.Name, usuario.Correo)
-                        }, CookieAuthenticationDefaults.AuthenticationScheme);
+                new Claim(ClaimTypes.Name, usuario.Correo)
+            }, CookieAuthenticationDefaults.AuthenticationScheme);
 
                     var principal = new ClaimsPrincipal(identity);
 
+                    // Registrar la cookie de autenticación
                     var login = HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
 
+                    // Redirigir al URL de retorno a donde iba, de lo contrario redirigir al home
                     if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
                     {
                         return Redirect(returnUrl);
                     }
                     return RedirectToAction("Index", "Home");
-                    
                 }
                 else
                 {
+                    // Mensaje de error si las credenciales son incorrectas
                     ViewData["mensaje"] = "Credenciales incorrectas. Intenta nuevamente.";
                 }
             }
             catch (Exception e)
             {
-                ViewData["mensaje"] = "Ocurrió un error inesperado. Por favor, intenta nuevamente." +e.Message;
+                // Mensaje de error en caso de excepción
+                ViewData["mensaje"] = "Ocurrió un error inesperado. Por favor, intenta nuevamente. " + e.Message;
             }
 
-
-            ViewData["Mensaje"]="Credenciales Incorrectas";
+            // Mensaje de error genérico
+            ViewData["Mensaje"] = "Credenciales Incorrectas";
             return View(usuario);
         }
+
 
 
         /// <summary>
@@ -180,13 +193,6 @@ namespace WEBAPP_NATURPIURA.Controllers
         {
             // quita las credenciales de los cookies
             var login = HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            //var car = from s in bd.Carritos select s;
-            //if (car != null)
-            //{
-
-            //    bd.SaveChanges();
-            //}
-            //redirecciona al homepage
             return RedirectToAction("Index", "Home");
         }
 
@@ -195,27 +201,34 @@ namespace WEBAPP_NATURPIURA.Controllers
             
             return View();
         }
-        
+
+        /// <summary>
+        /// Registra un nuevo usuario y su dirección en la base de datos.
+        /// </summary>
+        /// <param name="model">Objeto del modelo UsuarioRegistro que contiene los datos del usuario y su dirección.</param>
+        /// <returns>Redirige al home si el registro es exitoso; en caso contrario, muestra un mensaje de error.</returns>
         [HttpPost]
         public async Task<IActionResult> RegistrarAsync(UsuarioRegistro model)
         {
             Usuario _usuario = new Usuario();
-           
+
             try
             {
-               
+                // Verifica si el modelo es válido
                 if (ModelState.IsValid)
                 {
+                    // Verifica si el correo ya está registrado
                     var usuarioExistente = await _usuario.GetUsuarioByCorreoAsync(model.Usuario.Correo);
                     if (usuarioExistente != null)
                     {
                         ViewData["mensaje"] = "El correo ya está registrado.";
                         return View(model);
                     }
+
                     var UsuarioVista = model.Usuario;
                     var direccion = model.Direccion;
 
-
+                    // Crea un nuevo objeto Usuario con los datos del modelo
                     Usuario usuario = new Usuario
                     {
                         Nombres = model.Usuario.Nombres,
@@ -226,34 +239,37 @@ namespace WEBAPP_NATURPIURA.Controllers
                         TipoDocumento = model.Usuario.TipoDocumento,
                         IdRol = 1,
                         Clave = Encriptacion.Encrypt(model.Usuario.Clave),
-
                         FechaRegistro = DateTime.Now,
                         Activo = true
                     };
 
-                  // Agregar el usuario a la base de datos
+                    // Agrega el usuario a la base de datos
                     bd.Usuarios.Add(usuario);
                     bd.SaveChanges();
 
-                    // Asignar el IdUsuario a la dirección
+                    // Asigna el IdUsuario a la dirección
                     direccion.IdUsuario = usuario.IdUsuario;
                     direccion.FechaRegistro = DateTime.Now;
                     direccion.Activo = true;
 
-                    // Agregar la dirección a la base de datos
+                    // Agrega la dirección a la base de datos
                     bd.Direccions.Add(direccion);
                     bd.SaveChanges();
 
+                    // Redirige al home si el registro es exitoso
                     return RedirectToAction("Index", "Home");
-                } 
+                }
             }
             catch (Exception e)
             {
-                ViewData["mensaje"] = "Ocurrió un error inesperado. Por favor, intenta nuevamente." + e.Message;
+                // Maneja cualquier excepción y muestra un mensaje de error
+                ViewData["mensaje"] = "Ocurrió un error inesperado. Por favor, intenta nuevamente. " + e.Message;
             }
 
+            // Si el modelo no es válido o ocurre un error, retorna la vista con el modelo
             return View(model);
         }
+
 
         public async Task<IActionResult> VerificarOTP()
         {
@@ -261,7 +277,7 @@ namespace WEBAPP_NATURPIURA.Controllers
             return View();
 
         }
-
+        //prueba
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> VerificarOTP(string otpCode)
@@ -326,10 +342,6 @@ namespace WEBAPP_NATURPIURA.Controllers
         }
 
 
-       
-       
-
-      
 
         private bool UsuarioExists(object idusuario)
         {
