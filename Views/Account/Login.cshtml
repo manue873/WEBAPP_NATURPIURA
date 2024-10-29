@@ -20,6 +20,7 @@
         <!-- Sección de Iniciar Sesión -->
         <div class="form-container iniciar-sesion-container">
             <form asp-action="Login" method="post">
+                <input type="hidden" name="ReturnUrl" value="@ViewData["ReturnUrl"]" />
                 <h1>Iniciar Sesión</h1>
                 <span>Use su correo y contraseña</span>
                 <input asp-for="Correo" type="email" placeholder="Email" />

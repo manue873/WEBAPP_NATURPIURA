@@ -115,18 +115,23 @@ namespace WEBAPP_NATURPIURA.Controllers
             }
         }
 
-
-        public IActionResult Login()
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="ReturnUrl">Captura la url para luego mostrarla en el form del login para se redireccione al lugar donde iba a ir luego del loggin</param>
+        /// <returns></returns>
+        public IActionResult Login(string? ReturnUrl = null)
         {
             if (User.Identity.Name != null)
             {
                 return RedirectToAction("Index", "Home");
             }
+            ViewData["ReturnUrl"] = ReturnUrl;
             ViewData["mensaje"] = "";
             return View();
         }
         [HttpPost]
-        public IActionResult Login(UsuarioLogin usuario)
+        public IActionResult Login(UsuarioLogin usuario, string returnUrl = null)
         {
             //probando
             try
@@ -143,6 +148,11 @@ namespace WEBAPP_NATURPIURA.Controllers
                     var principal = new ClaimsPrincipal(identity);
 
                     var login = HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+
+                    if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+                    {
+                        return Redirect(returnUrl);
+                    }
                     return RedirectToAction("Index", "Home");
                     
                 }
@@ -150,9 +160,6 @@ namespace WEBAPP_NATURPIURA.Controllers
                 {
                     ViewData["mensaje"] = "Credenciales incorrectas. Intenta nuevamente.";
                 }
-
-
-
             }
             catch (Exception e)
             {

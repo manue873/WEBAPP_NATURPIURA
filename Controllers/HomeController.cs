@@ -55,7 +55,7 @@ namespace WEBAPP_NATURPIURA.Controllers
             {
                 var fechaLimite = DateTime.Now.AddMonths(-1);
                  listaProductosCatalogo = await _context.Productos
-                    .Where(p => p.FechaRegistro >= fechaLimite)
+                    .Where(p => p.FechaRegistro >= fechaLimite ).Where(x=>x.Activo==true)
                     .ToListAsync();
             }
             else
@@ -77,7 +77,7 @@ namespace WEBAPP_NATURPIURA.Controllers
         {
             return View();
         }
-        [Authorize]
+        
         public IActionResult Privacy()
         {
             return View();
