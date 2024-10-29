@@ -6,6 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <BaseOutputPath>bin\Debug\net6.0\</BaseOutputPath>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <UserSecretsId>27f8bc2a-98c8-4ed7-bfaf-b07ceaf79fb3</UserSecretsId>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

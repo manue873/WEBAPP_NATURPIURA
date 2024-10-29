@@ -2,7 +2,10 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using NATURPIURA.ViewModels;
+using System.Globalization;
+using System.Runtime.CompilerServices;
 using WEBAPP_NATURPIURA.Models1;
 using WEBAPP_NATURPIURA.ViewModels;
 
@@ -17,6 +20,66 @@ namespace WEBAPP_NATURPIURA.Controllers
             bd = context;
         }
 
+        //Servicios que deberian estar en otro paquete
+        //------------------------------------------------------------------------------------------
+        public async Task<ProductoRegistro> ObtenerProductoRegistroPorId(int id)
+        {
+            try
+            {
+                var productoActual = await bd.Productos.FirstOrDefaultAsync(x => x.IdProducto == id);
+                if (productoActual == null)
+                {
+                    return null; // Maneja el caso donde el producto no se encuentra
+                }
+
+                var beneficiosActuales = await bd.ProductoBeneficios
+                    .Where(x => x.IdProducto == id)
+                    .Select(x => x.IdBeneficio)
+                    .ToListAsync();
+
+                var kardexActual = await bd.Kardices.FirstOrDefaultAsync(x => x.IdProducto == id);
+
+                var productoRegistro = new ProductoRegistro
+                {
+                    Nombre = productoActual.Nombre,
+                    Activo = productoActual.Activo,
+                    Descripcion = productoActual.Descripcion,
+                    ImagenUrl = productoActual.ImagenUrl,
+                    DocumentoReferencia = kardexActual?.DocumentoReferencia ?? "sin datos",
+                    Observaciones = kardexActual?.Observaciones ?? "sin datos",
+                    PrecioUnidadCompra = productoActual.PrecioUnidadCompra,
+                    PrecioUnidadVenta = productoActual.PrecioUnidadVenta,
+                    Stock = productoActual.Stock,
+                    FechaRegistro = productoActual.FechaRegistro,
+                    IdCategoria = productoActual.IdCategoria,
+                    ListaBeneficios = beneficiosActuales,
+                    IdProducto = id
+                };
+
+                return productoRegistro;
+            }
+            catch (Exception e)
+            {
+                ModelState.AddModelError("", "Ocurrió un error al intentar obtener el producto. Inténtalo de nuevo.");
+                Console.WriteLine(e.Message);
+                return new ProductoRegistro(); // Devuelve un objeto vacío en caso de error
+            }
+        }
+
+
+        public async Task<List<Categorium>> ListarCategorias()
+        {
+            return await (from s in bd.Categoria
+                          orderby s.Descripcion ascending
+                          select s).ToListAsync();
+        }
+        public async Task<List<Beneficio>> ListarBeneficios()
+        {
+            return await (from s in bd.Beneficios
+                          orderby s.NombreBeneficio ascending
+                          select s).ToListAsync();
+        }
+        //--------------------------------------------------------------------
         public async Task<IActionResult> Index(string searchString)
         {
             ViewData["CurrentFilter"] = searchString;
@@ -51,13 +114,9 @@ namespace WEBAPP_NATURPIURA.Controllers
         // GET: ProductosController/Create
         public async Task<ActionResult> AgregarProducto()
         {
-            ViewBag.listaCategorias = await (from s in bd.Categoria
-                                             orderby s.Descripcion ascending
-                                             select new { s.Descripcion, s.IdCategoria }).ToListAsync();
+            ViewBag.listaCategorias = await ListarCategorias();
 
-            ViewBag.listaBeneficios = await (from s in bd.Beneficios
-                                             orderby s.NombreBeneficio ascending
-                                             select new { s.NombreBeneficio, s.IdBeneficio }).ToListAsync();
+            ViewBag.listaBeneficios = await ListarBeneficios();
 
             return View();
         }
@@ -69,13 +128,9 @@ namespace WEBAPP_NATURPIURA.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> AgregarProducto(ProductoRegistro modeloIngreso)
         {
-            ViewBag.listaCategorias = await (from s in bd.Categoria
-                                             orderby s.Descripcion ascending
-                                             select new { s.Descripcion, s.IdCategoria }).ToListAsync();
+            ViewBag.listaCategorias = await ListarCategorias();
 
-            ViewBag.listaBeneficios = await (from s in bd.Beneficios
-                                             orderby s.NombreBeneficio ascending
-                                             select new { s.NombreBeneficio, s.IdBeneficio }).ToListAsync();
+            ViewBag.listaBeneficios = await ListarBeneficios();
             try
             {
                 var productoRegistro = modeloIngreso;
@@ -98,8 +153,8 @@ namespace WEBAPP_NATURPIURA.Controllers
 
                 for (int i = 0; i < modeloIngreso.ListaBeneficios.Count; i++)
                 {
-                    var beneficioid= modeloIngreso.ListaBeneficios[i];
-                    var productoBeneficio= new ProductoBeneficio
+                    var beneficioid = modeloIngreso.ListaBeneficios[i];
+                    var productoBeneficio = new ProductoBeneficio
                     {
                         IdProducto = producto.IdProducto,
                         IdBeneficio = beneficioid
@@ -116,16 +171,16 @@ namespace WEBAPP_NATURPIURA.Controllers
                     CostoUnitario = modeloIngreso.PrecioUnidadCompra,
                     TotalCostoMovimiento = modeloIngreso.Stock * modeloIngreso.PrecioUnidadCompra,
                     SaldoCantidad = modeloIngreso.Stock,
-                    DocumentoReferencia = "000000000000",
-                    Observaciones = "No hay observaciones",
-                    SaldoCosto= modeloIngreso.Stock * modeloIngreso.PrecioUnidadCompra,
+                    DocumentoReferencia = modeloIngreso.DocumentoReferencia,
+                    Observaciones = modeloIngreso.Observaciones,
+                    SaldoCosto = modeloIngreso.Stock * modeloIngreso.PrecioUnidadCompra,
                     IdUsuario = CurrentUser.IdUsuario,
-                    IdProductoNavigation=producto
+                    IdProductoNavigation = producto
                 };
 
-                 await bd.Kardices.AddAsync(kardex);
+                await bd.Kardices.AddAsync(kardex);
                 await bd.SaveChangesAsync();
-                
+
                 return RedirectToAction("Index", "Productos");
             }
 
@@ -138,17 +193,34 @@ namespace WEBAPP_NATURPIURA.Controllers
             return View(modeloIngreso);
         }
 
+        
+
         // GET: ProductosController/Edit/5
-        public ActionResult Edit(int id)
+        public async Task<ActionResult> ModificarProducto(int id)
         {
-            return View();
+            ViewBag.listaCategorias = await ListarCategorias();
+
+            ViewBag.listaBeneficios = await ListarBeneficios();
+
+            var productoRegistro = await ObtenerProductoRegistroPorId(id);
+            ViewBag.PrecioUnidadCompra = productoRegistro.PrecioUnidadCompra.ToString(CultureInfo.InvariantCulture);
+            ViewBag.PrecioUnidadVenta = productoRegistro.PrecioUnidadVenta.ToString(CultureInfo.InvariantCulture);
+
+            if (productoRegistro == null)
+            {
+                return NotFound();
+            }
+            return View(productoRegistro);
         }
 
         // POST: ProductosController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<ActionResult> ModificarProducto(int id, IFormCollection collection)
         {
+            ViewBag.listaCategorias = await ListarCategorias();
+
+            ViewBag.listaBeneficios = await ListarBeneficios();
             try
             {
                 return RedirectToAction(nameof(Index));
@@ -160,24 +232,6 @@ namespace WEBAPP_NATURPIURA.Controllers
         }
 
         // GET: ProductosController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: ProductosController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
+       
     }
 }
