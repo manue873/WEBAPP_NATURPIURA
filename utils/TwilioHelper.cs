@@ -6,7 +6,7 @@ namespace WEBAPP_NATURPIURA.utils
 {
     public class TwilioHelper
     {
-        private SMSSetings smsSetings = new SMSSetings();
+        /*private SMSSetings smsSetings = new SMSSetings();
         public string sendSMSMEssage(string toMobileNumber, string messagetosend)
         {
             TwilioClient.Init(
@@ -19,6 +19,6 @@ namespace WEBAPP_NATURPIURA.utils
                 body: messagetosend
                 );
             return message.Sid;
-        }
+        }*/
     }
 }
