@@ -7,6 +7,7 @@ using NATURPIURA.ViewModels;
 using System.Globalization;
 using System.Runtime.CompilerServices;
 using WEBAPP_NATURPIURA.Models1;
+using WEBAPP_NATURPIURA.Servicios;
 using WEBAPP_NATURPIURA.ViewModels;
 
 namespace WEBAPP_NATURPIURA.Controllers
@@ -65,7 +66,7 @@ namespace WEBAPP_NATURPIURA.Controllers
                 return new ProductoRegistro(); // Devuelve un objeto vacío en caso de error
             }
         }
-
+        //--------------------------------------------------------------------
 
         public async Task<List<Categorium>> ListarCategorias()
         {
@@ -79,7 +80,7 @@ namespace WEBAPP_NATURPIURA.Controllers
                           orderby s.NombreBeneficio ascending
                           select s).ToListAsync();
         }
-        //--------------------------------------------------------------------
+        
         public async Task<IActionResult> Index(string searchString)
         {
             ViewData["CurrentFilter"] = searchString;
@@ -104,26 +105,13 @@ namespace WEBAPP_NATURPIURA.Controllers
                 return View();
             }
         }
-
-
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
-
-        // GET: ProductosController/Create
         public async Task<ActionResult> AgregarProducto()
         {
             ViewBag.listaCategorias = await ListarCategorias();
 
             ViewBag.listaBeneficios = await ListarBeneficios();
-
             return View();
-        }
-
-
-
-        // POST: ProductosController/Create
+        }        // POST: ProductosController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> AgregarProducto(ProductoRegistro modeloIngreso)
@@ -133,53 +121,12 @@ namespace WEBAPP_NATURPIURA.Controllers
             ViewBag.listaBeneficios = await ListarBeneficios();
             try
             {
-                var productoRegistro = modeloIngreso;
                 var usuario = new Usuario();
                 Usuario CurrentUser = await usuario.GetUsuarioByCorreoAsync(User.Identity.Name);
-                Producto producto = new Producto
-                {
-                    Nombre = modeloIngreso.Nombre,
-                    Descripcion = modeloIngreso.Descripcion,
-                    Stock = modeloIngreso.Stock,
-                    Activo = modeloIngreso.Activo,
-                    FechaRegistro = modeloIngreso.FechaRegistro,
-                    PrecioUnidadCompra = modeloIngreso.PrecioUnidadCompra,
-                    PrecioUnidadVenta = modeloIngreso.PrecioUnidadVenta,
-                    ImagenUrl = modeloIngreso.ImagenUrl,
-                    IdCategoria = modeloIngreso.IdCategoria
-                };
-                bd.Productos.Add(producto);
-                bd.SaveChanges();
-
-                for (int i = 0; i < modeloIngreso.ListaBeneficios.Count; i++)
-                {
-                    var beneficioid = modeloIngreso.ListaBeneficios[i];
-                    var productoBeneficio = new ProductoBeneficio
-                    {
-                        IdProducto = producto.IdProducto,
-                        IdBeneficio = beneficioid
-                    };
-                    bd.ProductoBeneficios.Add(productoBeneficio);
-                }
-                bd.SaveChanges();
-                var kardex = new Kardex()
-                {
-                    IdProducto = modeloIngreso.IdProducto,
-                    FechaMovimiento = modeloIngreso.FechaRegistro,
-                    TipoMovimiento = "Ingreso",
-                    Cantidad = modeloIngreso.Stock,
-                    CostoUnitario = modeloIngreso.PrecioUnidadCompra,
-                    TotalCostoMovimiento = modeloIngreso.Stock * modeloIngreso.PrecioUnidadCompra,
-                    SaldoCantidad = modeloIngreso.Stock,
-                    DocumentoReferencia = modeloIngreso.DocumentoReferencia,
-                    Observaciones = modeloIngreso.Observaciones,
-                    SaldoCosto = modeloIngreso.Stock * modeloIngreso.PrecioUnidadCompra,
-                    IdUsuario = CurrentUser.IdUsuario,
-                    IdProductoNavigation = producto
-                };
-
-                await bd.Kardices.AddAsync(kardex);
-                await bd.SaveChangesAsync();
+                ProductServicio productServicio = new ProductServicio(bd);
+                await productServicio.ActualizarYCrearProducto(modeloIngreso,CurrentUser.IdUsuario);
+                
+             
 
                 return RedirectToAction("Index", "Productos");
             }
@@ -216,13 +163,17 @@ namespace WEBAPP_NATURPIURA.Controllers
         // POST: ProductosController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> ModificarProducto(int id, IFormCollection collection)
+        public async Task<ActionResult> ModificarProducto( ProductoRegistro modeloIngreso)
         {
             ViewBag.listaCategorias = await ListarCategorias();
-
             ViewBag.listaBeneficios = await ListarBeneficios();
             try
             {
+                var usuario = new Usuario();
+                Usuario CurrentUser = await usuario.GetUsuarioByCorreoAsync(User.Identity.Name);
+                ProductServicio productServicio = new ProductServicio(bd);
+                await productServicio.ActualizarYCrearProducto(modeloIngreso, CurrentUser.IdUsuario);
+
                 return RedirectToAction(nameof(Index));
             }
             catch

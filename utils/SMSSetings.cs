@@ -6,7 +6,7 @@
         {
             get
             {
-                return "AC092fdb7b2396729ca22653fdafd7d4d1";
+                return "";
             }
 
         }
@@ -14,7 +14,7 @@
         {
             get
             {
-                return "d9a8723142ad51af6114db2679f88c56";
+                return "";
             }
         }
         public string Twilio_Phone_Number
