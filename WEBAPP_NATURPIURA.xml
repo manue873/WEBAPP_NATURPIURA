@@ -1,0 +1,80 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>WEBAPP_NATURPIURA</name>
+    </assembly>
+    <members>
+        <member name="T:WEBAPP_NATURPIURA.Controllers.AccountController">
+            <summary>
+            Controlador para los servicios de la cuenta del usuario
+            </summary>
+        </member>
+        <member name="F:WEBAPP_NATURPIURA.Controllers.AccountController.bd">
+            <summary>
+            Campo de solo lectura que almacena el contexto de la base de datos.
+            </summary>
+        </member>
+        <member name="M:WEBAPP_NATURPIURA.Controllers.AccountController.#ctor(WEBAPP_NATURPIURA.Models1.NatupiuraContext)">
+            <summary>
+            Constructor de la clase <see cref="T:WEBAPP_NATURPIURA.Controllers.AccountController"/>. Inicializa una nueva instancia del controlador con un contexto de base de datos.
+            </summary>
+            <param name="context">Instancia del contexto de base de datos <see cref="T:WEBAPP_NATURPIURA.Models1.NatupiuraContext"/> que se utilizará para acceder a la base de datos.</param>
+        </member>
+        <member name="M:WEBAPP_NATURPIURA.Controllers.AccountController.Encrypt(System.String)">
+            <summary>
+            Encriptacion de la clave mediante AES, la Key y la Iv se almacenan dentro de la misma clave
+            </summary>
+            <param name="plainText">recibe la clave ingresada en el formulario de inicio de session en formato String</param>
+            <returns>Retorna la clave encriptada que se almacenara </returns>
+        </member>
+        <member name="M:WEBAPP_NATURPIURA.Controllers.AccountController.Decrypt(System.Byte[])">
+            <summary>
+             Desencriptacion de la clave generada por el metodo <see cref="M:WEBAPP_NATURPIURA.Controllers.AccountController.Encrypt(System.String)"/> 
+            </summary>
+            <param name="cipherText">texto cifrado</param>
+            <returns>Retorna la clave decifrada</returns>
+        </member>
+        <member name="M:WEBAPP_NATURPIURA.Controllers.AccountController.Login(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="ReturnUrl">Captura la url para luego mostrarla en el form del login para se redireccione al lugar donde iba a ir luego del loggin</param>
+            <returns></returns>
+        </member>
+        <member name="M:WEBAPP_NATURPIURA.Controllers.AccountController.Login(WEBAPP_NATURPIURA.ViewModels.UsuarioLogin,System.String)">
+            <summary>
+            Verificación de credenciales del usuario y registro de los archivos en el navegador (cookies).
+            </summary>
+            <param name="usuario">Objeto del modelo UsuarioLogin usado para el Login.</param>
+            <param name="returnUrl">URL actual desde la que se desea el login, se usa para seguir el flujo a donde iba el usuario.</param>
+            <returns>Si las credenciales son correctas, redirige al home y almacena las cookies en el navegador; caso contrario, se sigue en el bucle.</returns>
+        </member>
+        <member name="M:WEBAPP_NATURPIURA.Controllers.AccountController.Logout">
+            <summary>
+            Cierra la session desde los claims 
+            </summary>
+            <returns>Redirecciona al Homepage </returns>
+        </member>
+        <member name="M:WEBAPP_NATURPIURA.Controllers.AccountController.RegistrarAsync(WEBAPP_NATURPIURA.ViewModels.UsuarioRegistro)">
+            <summary>
+            Registra un nuevo usuario y su dirección en la base de datos.
+            </summary>
+            <param name="model">Objeto del modelo UsuarioRegistro que contiene los datos del usuario y su dirección.</param>
+            <returns>Redirige al home si el registro es exitoso; en caso contrario, muestra un mensaje de error.</returns>
+        </member>
+        <member name="M:WEBAPP_NATURPIURA.Servicios.Encriptacion.Encrypt(System.String)">
+            <summary>
+            Encriptacion de la clave mediante AES, la Key y la Iv se almacenan dentro de la misma clave
+            </summary>
+            <param name="plainText">recibe la clave ingresada en el formulario de inicio de session en formato String</param>
+            <returns>Retorna la clave encriptada que se almacenara </returns>
+        </member>
+        <member name="M:WEBAPP_NATURPIURA.Servicios.Encriptacion.Decrypt(System.Byte[])">
+            <summary>
+             Desencriptacion de la clave generada por el metodo <see cref="M:WEBAPP_NATURPIURA.Servicios.Encriptacion.Encrypt(System.String)"/> 
+            </summary>
+            <param name="cipherText">texto cifrado</param>
+            <returns>Retorna la clave decifrada</returns>
+        </member>
+    </members>
+</doc>
